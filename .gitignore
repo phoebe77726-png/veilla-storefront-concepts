@@ -1,0 +1,9 @@
+# dependencies and builds (each version has its own as well)
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+.DS_Store
+.env*
+# local preview launcher config (machine-specific paths)
+.claude/

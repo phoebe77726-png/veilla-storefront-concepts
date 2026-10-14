@@ -1,0 +1,190 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/*
+ * Veilla design tokens.
+ * Brand palette lives here once; shadcn semantic variables map onto it below.
+ * See DESIGN.md §3 for usage rules and contrast notes.
+ */
+@theme {
+  --color-ivory: #f5efe4;
+  --color-paper: #fbf8f2;
+  --color-linen: #eae1d1;
+  --color-plaster: #e9d3be;
+  --color-sand: #d3c4ad;
+  --color-ink: #1c1b17;
+  --color-ink-soft: #585148;
+  --color-botanical: #1f3a2b;
+  --color-botanical-deep: #132519;
+  --color-cocoa: #6e4e3d;
+  --color-cocoa-soft: #c6a690;
+  --color-oil: #c08a2c;
+
+  --font-display: var(--font-gloock), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --text-display-xxl: clamp(3.5rem, 11vw, 11.5rem);
+  --text-display-xxl--line-height: 0.86;
+  --text-display-xxl--letter-spacing: -0.035em;
+  --text-display-xl: clamp(3rem, 7vw, 7rem);
+  --text-display-xl--line-height: 0.92;
+  --text-display-xl--letter-spacing: -0.03em;
+  --text-display-l: clamp(2.4rem, 4.8vw, 4.5rem);
+  --text-display-l--line-height: 1;
+  --text-display-l--letter-spacing: -0.02em;
+  --text-display-m: clamp(1.9rem, 3.2vw, 3rem);
+  --text-display-m--line-height: 1.08;
+  --text-display-m--letter-spacing: -0.015em;
+  --text-body: 1.0625rem;
+  --text-label: 0.8125rem;
+  --text-label--line-height: 1.45;
+  --text-body--line-height: 1.6;
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.16em;
+
+  --spacing-section: clamp(5rem, 11vw, 10.5rem);
+  --spacing-gutter: clamp(1rem, 4vw, 3.5rem);
+
+  --ease-veil: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-heading: var(--font-display);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+}
+
+:root {
+  --background: var(--color-ivory);
+  --foreground: var(--color-ink);
+  --card: var(--color-paper);
+  --card-foreground: var(--color-ink);
+  --popover: var(--color-paper);
+  --popover-foreground: var(--color-ink);
+  --primary: var(--color-botanical);
+  --primary-foreground: var(--color-ivory);
+  --secondary: var(--color-linen);
+  --secondary-foreground: var(--color-ink);
+  --muted: var(--color-linen);
+  --muted-foreground: var(--color-ink-soft);
+  --accent: var(--color-linen);
+  --accent-foreground: var(--color-ink);
+  --destructive: #9b2c1f;
+  --border: var(--color-sand);
+  --input: var(--color-sand);
+  --ring: var(--color-botanical);
+  --radius: 0px;
+  --header-h: 4rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--header-h) + 1rem);
+  }
+  body {
+    @apply bg-background text-foreground text-body antialiased;
+    font-feature-settings: "ss01", "kern";
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+
+  /* One visible, consistent focus style everywhere. Dark sections flip to the oil accent. */
+  :focus-visible {
+    outline: 2px solid var(--color-botanical);
+    outline-offset: 3px;
+  }
+  .on-dark :focus-visible {
+    outline-color: var(--color-oil);
+  }
+
+  ::selection {
+    background: var(--color-plaster);
+    color: var(--color-ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/*
+ * `walk:` — the horizontal gallery walk is only used where it helps:
+ * wide screens, a precise pointer, and motion allowed. Everywhere else rooms stack.
+ */
+@custom-variant walk {
+  @media (min-width: 64rem) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    @slot;
+  }
+}
+
+@utility fig {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@utility container-veil {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  letter-spacing: var(--text-eyebrow--letter-spacing);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Subtle paper grain for warm bands — pure CSS, no image request. */
+@utility grain {
+  background-image: radial-gradient(rgb(28 27 23 / 0.025) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
